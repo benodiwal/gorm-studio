@@ -7,6 +7,7 @@ import (
 	"github.com/benodiwal/gorm-studio/pkg/env"
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type Database struct {

@@ -10,7 +10,7 @@ func startCmd() *cobra.Command {
 		Use: "start",
 		Short: "Start the gorm-studio web interface",
 		Run: func(cmd *cobra.Command, args []string) {
-			startFunc.StartServer()
+			startFunc.Start()
 		},
 	}
 

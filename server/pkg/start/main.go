@@ -1,27 +1,63 @@
 package startFunc
 
 import (
+	"fmt"
 	"log"
-	"net/http"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"sync"
 
 	"github.com/benodiwal/gorm-studio/pkg/database"
 	"github.com/benodiwal/gorm-studio/pkg/env"
-	"github.com/gin-gonic/gin"
+	"github.com/benodiwal/gorm-studio/pkg/routes"
 )
 
-func StartServer() {
+func Start() {
 	env.Load()
-	r := gin.Default()
+	var wg sync.WaitGroup
 
+	wg.Add(2)
+
+	go func() {
+		defer wg.Done()
+		runClient()
+	}()
+
+	go func() {
+		defer wg.Done()
+		runServer()
+	}()
+
+	wg.Wait()
+}
+
+func runServer() {
 	logger := log.Default()
 	db := database.Connect(logger)
 	println(db)
-	
-	r.GET("/ping", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H {
-			"message": "pong",
-		})
-	})
 
-	r.Run()
+	router := routes.New()
+
+	router.RegisterMiddlewares()
+	router.RegisterRoutes()
+
+	router.Engine.Run(":8000")
+}
+
+func runClient() {
+	clientDir := filepath.Join("..", "client")
+	err := os.Chdir(clientDir)
+	if err != nil {
+		fmt.Println("Failed to change directory: ", err)
+		return
+	}
+
+	command := exec.Command("yarn", "dev")
+	command.Stdout = os.Stdout
+	command.Stdin = os.Stdin
+
+	if err := command.Run(); err != nil {
+		fmt.Println("Failed to start the dev server: ", err)
+	}
 }

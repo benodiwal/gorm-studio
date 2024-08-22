@@ -35,9 +35,8 @@ func Start() {
 func runServer() {
 	logger := log.Default()
 	db := database.Connect(logger)
-	println(db)
 
-	router := routes.New()
+	router := routes.New(db)
 
 	router.RegisterMiddlewares()
 	router.RegisterRoutes()

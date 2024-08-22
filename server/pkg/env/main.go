@@ -8,8 +8,7 @@ import (
 )
 
 const (
-	PORT = iota
-	DB_DRIVER
+	DB_DRIVER = iota
 	DB_HOST
 	DB_PORT
 	DB_USER
@@ -19,7 +18,6 @@ const (
 )
 
 var keys = []string {
-	"PORT",
 	"DB_DRIVER",
 	"DB_HOST",
 	"DB_PORT",

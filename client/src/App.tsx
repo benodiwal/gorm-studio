@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import AxiosClient from './lib/http';
 
 type Model = string;
 type Record = { [key: string]: any };
@@ -31,6 +32,8 @@ const App: React.FC = () => {
   }, [theme]);
 
   const fetchModels = async (): Promise<void> => {
+    const res = await AxiosClient.get("/health");
+    console.log(res);
   };
 
   const fetchRecords = async (model: Model): Promise<void> => {
